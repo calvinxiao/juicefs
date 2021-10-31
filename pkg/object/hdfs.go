@@ -1,3 +1,4 @@
+//go:build !nohdfs
 // +build !nohdfs
 
 /*
@@ -208,9 +209,7 @@ func (h *hdfsclient) walk(path string, walkFn filepath.WalkFunc) error {
 	sort.Strings(names)
 
 	for _, name := range names {
-		if strings.HasSuffix(name, "/") {
-			name = name[:len(name)-1]
-		}
+		name = strings.TrimSuffix(name, "/")
 		err = h.walk(filepath.ToSlash(filepath.Join(path, name)), walkFn)
 		if err != nil {
 			return err
